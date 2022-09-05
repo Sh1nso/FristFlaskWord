@@ -1,16 +1,58 @@
-# This is a sample Python script.
+import json
+from flask import Flask
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = Flask(__name__)
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+with open('candidates.json', encoding='utf-8') as file:
+    data = json.loads(file.read())
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@app.route('/')
+def main_page() -> str:
+    """
+    Вывод список все кандидатов
+    """
+    new_list = []
+    for candidate in data:
+        a = f'<pre>' \
+            f'Имя кандидата - {candidate["name"]}' \
+            f'\nПозиция кандидата - {candidate["position"]}' \
+            f'\nНавык кандидата {"".join(candidate["skills"])}' \
+            f'<pre>'
+        new_list.append(a)
+    return ' '.join(new_list)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+@app.route('/candidate/<candidate_id>')
+def get_candidate(candidate_id: str) -> str:
+    """
+    Выводит кандидата по его уникальному ID
+    """
+    for candidate in data:
+        if candidate['id'] == int(candidate_id):
+            return f'<img src="{candidate["picture"]}">' \
+                   f'<pre>' \
+                   f'Имя кандидата - {candidate["name"]}' \
+                   f'\nПозиция кандидата - {candidate["position"]}' \
+                   f'\nНавык кандидата {"".join(candidate["skills"])}' \
+                   f'<pre>'
+
+
+@app.route('/skill/<prof_skill>')
+def get_skill_of_candidate(prof_skill: str) -> str:
+    """
+    Выводи список кандидатов, у которых имеется переданный prof_skill
+    """
+    new_list = []
+    for candidate in data:
+        if prof_skill.lower() in "".join(candidate["skills"]).lower().split(", "):
+            a = f'<pre>' \
+                f'Имя кандидата - {candidate["name"]}' \
+                f'\nПозиция кандидата - {candidate["position"]}' \
+                f'\nНавык кандидата {"".join(candidate["skills"])}' \
+                f'<pre>'
+            new_list.append(a)
+    return ' '.join(new_list)
+
+
+app.run()
