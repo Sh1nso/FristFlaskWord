@@ -29,7 +29,7 @@ def get_candidate(candidate_id: str) -> str:
     """
     Выводит кандидата по его уникальному ID
     """
-    if int(candidate_id) > len(data):
+    if candidate_id.isdigit() is False or int(candidate_id) > len(data):
         return f'У нас нет информации о кандидате с ID {candidate_id}'
     for candidate in data:
         if candidate['id'] == int(candidate_id):
