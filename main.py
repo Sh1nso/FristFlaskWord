@@ -29,8 +29,8 @@ def get_candidate(candidate_id: str) -> str:
     """
     Выводит кандидата по его уникальному ID
     """
-    if candidate_id.isdigit() is False or int(candidate_id) > len(data):
-        return f'У нас нет информации о кандидате с ID {candidate_id}'
+    if candidate_id.isdigit() is False:
+        return f'Введите число!'
     for candidate in data:
         if candidate['id'] == int(candidate_id):
             return (f'<img src="{candidate["picture"]}">'
@@ -39,7 +39,7 @@ def get_candidate(candidate_id: str) -> str:
                     f'\nПозиция кандидата - {candidate["position"]}'
                     f'\nНавык кандидата {"".join(candidate["skills"])}'
                     f'</pre>')
-
+    return f'Кандидата с id {candidate_id} нет в базе'
 
 @app.route('/skill/<prof_skill>')
 def get_skill_of_candidate(prof_skill: str) -> str:
