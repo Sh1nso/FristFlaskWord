@@ -41,6 +41,7 @@ def get_candidate(candidate_id: str) -> str:
                     f'</pre>')
     return f'Кандидата с id {candidate_id} нет в базе'
 
+
 @app.route('/skill/<prof_skill>')
 def get_skill_of_candidate(prof_skill: str) -> str:
     """
